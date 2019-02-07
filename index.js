@@ -1,12 +1,31 @@
-var app = require('express')();
+var express = require('express');
+var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+var Cookies = require('cookies');
 var port = process.env.PORT || 3000;
+let lastVisit;
 
+app.use(express.static('public'));
 
 app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
+  
+  var keys = ['keyboard cat'];
+  var cookies = new Cookies(req, res, { keys: keys })
+  lastVisit = cookies.get('LastVisit', { signed: true })
+  cookies.set('LastVisit', new Date().toISOString(), { signed: true })
+ 
+  // if (!lastVisit) {
+  //   res.setHeader('Content-Type', 'text/plain')
+  //   res.end('Welcome, first time visitor!')
+  // } else {
+  //   res.setHeader('Content-Type', 'text/plain')
+  //   res.end('Welcome back! Nothing much changed since your last visit at ' + lastVisit + '.')
+  // }
 });
+
+
 
 io.on('connection', function(socket){
   io.emit('chat message', sendFullMessage('Ktoś dołączył do chatu!'), 'join');
