@@ -55,8 +55,12 @@
       padding: 5px 10px; 
     }
 
-    #messages .server-text { 
+    #messages .join-text { 
       color: #0000e6;
+    }
+
+    #messages .leave-text { 
+      color: #e60000;
     }
 
     #messages li:nth-child(odd) { 
@@ -93,10 +97,16 @@
         });
         socket.on('chat message', function(msg, type){
           switch(type) {
-            case 'server': {
-              $('#messages').append($('<li class="server-text">').text(msg));
+            case 'join': {
+              $('#messages').append($('<li class="join-text">').text(msg));
               break;
             }
+
+            case 'leave': {
+              $('#messages').append($('<li class="leave-text">').text(msg));
+              break;
+            }
+
             default: {
               $('#messages').append($('<li>').text(msg));
               break;
