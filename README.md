@@ -23,3 +23,5 @@ Todo:
 - [ ] Notification when someone disconnected
 - [ ] Color picker for nickname
 - [ ] Server logs file
+- [ ] Friends tab
+- [ ] Last time visit
