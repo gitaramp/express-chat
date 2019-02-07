@@ -10,6 +10,8 @@ Todo:
 - [x] Protection against empty messages (spam)
 - [x] Special color for server notifications
 - [x] Default nickname for unknow users
+- [x] Add bulma framework
+- [x] Configure gulpfile
 - [ ] Emoji
 - [ ] Command for draw gif from giphy.com
 - [ ] Chat rooms
