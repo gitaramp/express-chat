@@ -19,7 +19,7 @@ Todo:
 - [ ] Scss file for stylesheet
 - [ ] Server language options (English/Polish)
 - [ ] Default user avatar
-- [ ] Avatar from disc or url
+- [ ] Own user avatar from disc or url
 - [ ] Notification when someone disconnected
 - [ ] Color picker for nickname
 - [ ] Server logs file
