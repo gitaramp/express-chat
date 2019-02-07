@@ -12,17 +12,17 @@ Todo:
 - [x] Default nickname for unknow users
 - [x] Add bulma framework
 - [x] Configure gulpfile
+- [x] Notification when someone disconnected
+- [x] Scss file for stylesheet
 - [ ] Emoji
 - [ ] Command for draw gif from giphy.com
 - [ ] Chat rooms
 - [ ] Private messages
 - [ ] Dark mode
 - [ ] Using '@' symbol to mark someone on chat
-- [ ] Scss file for stylesheet
 - [ ] Server language options (English/Polish)
 - [ ] Default user avatar
 - [ ] Own user avatar from disc or url
-- [ ] Notification when someone disconnected
 - [ ] Color picker for nickname
 - [ ] Server logs file
 - [ ] Friends tab

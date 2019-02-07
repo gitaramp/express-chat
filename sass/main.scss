@@ -1,11 +1,23 @@
 @import 'node_modules/bulma/sass/utilities/initial-variables';
 @import 'node_modules/bulma/bulma';
 
+
 body {
   display: flex;
   min-height: 100vh;
   flex-direction: column;
 }
+
+.modal-content {
+  overflow-x: hidden;
+  overflow-y: hidden;
+
+  .form-login {
+    margin-top: 10px;
+  }
+}
+
+
 
 .form-chat {
   background: #ededed;

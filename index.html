@@ -7,25 +7,48 @@
     <title>Express Chat</title>
   </head>
   <body>
-      <ul id="messages"></ul>
-        <form action="" class="form-chat">
-          <div class="columns">
-            <div class="column is-2">
-              <input class="input is-medium" id="nick" placeholder="Nick"/>
+    <ul id="messages"></ul>
+
+    <div class="modal is-active">
+      <div class="modal-background"></div>
+      <div class="modal-content">
+        <p class="is-size-2 has-text-primary">Witaj nowy!</p>
+        <label class="label has-text-link">Twój nick</label>
+        <form action="" class="form-login">
+            <div class='columns'>
+              <div class='column'>
+                <div class="control">
+                  <input class="input" id="nickName" type="text" placeholder="Nick">
+                </div>
+              </div>
+              <div class='column'>
+                <button class="button is-link">
+                  <span class="icon is-small">
+                    <i class="fas fa-sign-in-alt"></i>
+                  </span>
+                  <span>Dołącz do chatu</span>
+                </button>
+              </div>
             </div>
-            <div class="column is-9">
-              <input class="input is-medium" id="message" autocomplete="off" placeholder="Wiadomość" />
-            </div>
-            <div class="column">
-              <button class="button is-success is-medium">
-                <span class="icon is-small">
-                  <i class="fas fa-arrow-circle-up"></i>
-                </span>
-                <span>Wyślij</span>
-              </button>
-            </div>
-          </div>
         </form>
+      </div>
+    </div>  
+
+    <form action="" class="form-chat">
+      <div class="columns">
+        <div class="column is-11">
+          <input class="input is-medium" id="message" autocomplete="off" placeholder="Wiadomość" />
+        </div>
+        <div class="column">
+          <button class="button is-success is-medium">
+            <span class="icon is-small">
+              <i class="fas fa-arrow-circle-up"></i>
+            </span>
+            <span>Wyślij</span>
+          </button>
+        </div>
+      </div>
+    </form>
 
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
@@ -33,15 +56,21 @@
     <script>
       $(function () {
         var socket = io();
-        let defaultNick; 
-        $('form').submit(function(){
+        let nickName; 
+        $('.form-login').submit(function(){
+          nickName = $('#nickName').val();
+          $('.modal').removeClass('is-active');
+          return false;
+        });
+
+        $('.form-chat').submit(function(){
           if($('#message').val() === '') {
             window.alert(`Musisz podać wiadomość!`);
             return false;
           }
-          $('#nick').val() === '' ? defaultNick = 'Anonim': defaultNick = $('#nick').val();
+          nickName === '' ? nickName = 'Anonim': nickName;
 
-          const messageWithNick = `${defaultNick}: ${$('#message').val()}`;
+          const messageWithNick = `${nickName}: ${$('#message').val()}`;
           socket.emit('chat message', messageWithNick);
           $('#message').val('');
           return false;
