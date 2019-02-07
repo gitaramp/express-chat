@@ -8,7 +8,7 @@ var gulp = require("gulp"),
 function style() {
   return (
     gulp
-      .src('./sass/main.sass')
+      .src('./sass/main.scss')
       .pipe(sourcemaps.init())
       .pipe(sass())
       .on("error", sass.logError)
@@ -19,7 +19,7 @@ function style() {
 }
  
 function watch() {
-  gulp.watch("sass/*.sass", style);
+  gulp.watch("sass/*.scss", style);
 }
 
 gulp.task('default', gulp.series(style, watch));

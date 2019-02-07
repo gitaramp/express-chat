@@ -7,11 +7,26 @@
     <title>Express Chat</title>
   </head>
   <body>
-    <ul id="messages"></ul>
-    <form action="" class="form-chat">
-      <input id="nick" placeholder="Nick"/>
-      <input id="message" autocomplete="off" placeholder="Wiadomość" /><button>Wyślij</button>
-    </form>
+      <ul id="messages"></ul>
+        <form action="" class="form-chat">
+          <div class="columns">
+            <div class="column is-2">
+              <input class="input is-medium" id="nick" placeholder="Nick"/>
+            </div>
+            <div class="column is-9">
+              <input class="input is-medium" id="message" autocomplete="off" placeholder="Wiadomość" />
+            </div>
+            <div class="column">
+              <button class="button is-success is-medium">
+                <span class="icon is-small">
+                  <i class="fas fa-arrow-circle-up"></i>
+                </span>
+                <span>Wyślij</span>
+              </button>
+            </div>
+          </div>
+        </form>
+
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>

@@ -1,0 +1,42 @@
+@import 'node_modules/bulma/sass/utilities/initial-variables';
+@import 'node_modules/bulma/bulma';
+
+body {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+.form-chat {
+  background: #ededed;
+  padding: 10px;
+  margin-bottom: 2px;
+
+    .column {
+      text-align: center;
+    }
+}
+
+#messages {
+  list-style-type: none; 
+  margin: 0; 
+  padding: 0; 
+  margin-bottom: 40px;
+  flex: 1;
+
+    li {
+      padding: 5px 10px; 
+    }
+
+    .join-text {
+      color: #0000e6
+    }
+
+    .leave-text {
+      color: #e60000;
+    }
+
+    li:nth-child(odd) {
+      background: #eee; 
+    }
+}
