@@ -14,6 +14,7 @@ Todo:
 - [x] Configure gulpfile
 - [x] Notification when someone disconnected
 - [x] Scss file for stylesheet
+- [x] Default user avatar
 - [ ] Emoji
 - [ ] Command for draw gif from giphy.com
 - [ ] Chat rooms
@@ -21,9 +22,11 @@ Todo:
 - [ ] Dark mode
 - [ ] Using '@' symbol to mark someone on chat
 - [ ] Server language options (English/Polish)
-- [ ] Default user avatar
 - [ ] Own user avatar from disc or url
 - [ ] Color picker for nickname
+- [ ] Avatar gallery from server
 - [ ] Server logs file
 - [ ] Friends tab
 - [ ] Last time visit
+- [ ] Display name of user who leave the server
+- [ ] User Profile
