@@ -31,6 +31,7 @@
               </div>
             </div>
         </form>
+        <p class="info-text is-size-7 has-text-warning">*Nie musisz podawać nicku</p>
       </div>
     </div>  
 
@@ -59,7 +60,9 @@
         let nickName; 
         $('.form-login').submit(function(){
           nickName = $('#nickName').val();
+          nickName === '' ? nickName = 'Anonim': nickName;
           $('.modal').removeClass('is-active');
+          socket.emit('user join', nickName);
           return false;
         });
 
@@ -68,27 +71,26 @@
             window.alert(`Musisz podać wiadomość!`);
             return false;
           }
-          nickName === '' ? nickName = 'Anonim': nickName;
 
           const messageWithNick = `${nickName}: ${$('#message').val()}`;
           socket.emit('chat message', messageWithNick);
           $('#message').val('');
           return false;
         });
-        socket.on('chat message', function(msg, type){
+        socket.on('chat message', function(msg, type, avatar){
           switch(type) {
             case 'join': {
-              $('#messages').append($('<li class="join-text">').text(msg));
+              $('#messages').append($('<li class="join-text">').html(msg));
               break;
             }
 
             case 'leave': {
-              $('#messages').append($('<li class="leave-text">').text(msg));
+              $('#messages').append($('<li class="leave-text">').html(msg));
               break;
             }
 
             default: {
-              $('#messages').append($('<li>').text(msg));
+              $('#messages').append($('<li>').html(msg));
               break;
             }
           }
