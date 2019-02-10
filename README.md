@@ -30,3 +30,4 @@ Todo:
 - [ ] Last time visit
 - [ ] Display name of user who leave the server
 - [ ] User Profile
+- [ ] Settings tab
