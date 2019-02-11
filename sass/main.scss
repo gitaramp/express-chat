@@ -12,8 +12,8 @@ body {
   overflow-x: hidden;
   overflow-y: hidden;
 
-  .form-login {
-    margin-top: 10px;
+  .column-login {
+    margin-bottom: 0px;
   }
 
   p.info-text {
@@ -21,16 +21,27 @@ body {
   }
 }
 
+.column-settings {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: -8px;
+  z-index: 1;
+  transition: margin-bottom 0.5s;
+}
 
+.column-settings:hover {
+  margin-bottom: 0 !important;
+}
 
-.form-chat {
+.chat-column {
+  z-index: 2;
   background: #ededed;
-  padding: 10px;
-  margin-bottom: 2px;
+  margin: 0 !important;
 
     .column {
       text-align: center;
     }
+
 }
 
 #messages {
@@ -46,7 +57,7 @@ body {
     }
 
     .join-text {
-      color: #0000e6
+      color: #5d5dff;
     }
 
     .leave-text {
@@ -56,4 +67,34 @@ body {
     li:nth-child(odd) {
       background: #eee; 
     }
+}
+
+
+
+
+// nightmode
+
+.body-nightmode {
+  background: #1d1d1d;
+}
+.message-nightmode {
+  color: #ffffff;
+  background-color: #0e0e0e;
+  border-color: #000000;
+}
+
+.messages-nightmode {
+  color: #d8d8d8 !important;
+
+    .leave-text {
+      color: #e60000 !important;
+    }
+
+    li:nth-child(odd) {
+      background: #151515 !important;
+    }
+}
+
+.chat-column-nightmode {
+  background: #121212;
 }

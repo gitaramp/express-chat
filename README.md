@@ -15,11 +15,11 @@ Todo:
 - [x] Notification when someone disconnected
 - [x] Scss file for stylesheet
 - [x] Default user avatar
+- [x] Dark mode
 - [ ] Emoji
 - [ ] Command for draw gif from giphy.com
 - [ ] Chat rooms
 - [ ] Private messages
-- [ ] Dark mode
 - [ ] Using '@' symbol to mark someone on chat
 - [ ] Server language options (English/Polish)
 - [ ] Own user avatar from disc or url
@@ -31,3 +31,4 @@ Todo:
 - [ ] Display name of user who leave the server
 - [ ] User Profile
 - [ ] Settings tab
+- [ ] Possibility to change nickname when user is loged

@@ -14,89 +14,126 @@
       <div class="modal-content">
         <p class="is-size-2 has-text-primary">Witaj nowy!</p>
         <label class="label has-text-link">Twój nick</label>
-        <form action="" class="form-login">
-            <div class='columns'>
-              <div class='column'>
-                <div class="control">
-                  <input class="input" id="nickName" type="text" placeholder="Nick">
-                </div>
-              </div>
-              <div class='column'>
-                <button class="button is-link">
-                  <span class="icon is-small">
-                    <i class="fas fa-sign-in-alt"></i>
-                  </span>
-                  <span>Dołącz do chatu</span>
-                </button>
+          <div class='columns column-login'>
+            <div class='column'>
+              <div class="control">
+                <input class="input" id="nickName" type="text" placeholder="Nick">
               </div>
             </div>
-        </form>
+            <div class='column'>
+              <button class="button is-link" id="btn-login">
+                <span class="icon is-small">
+                  <i class="fas fa-sign-in-alt"></i>
+                </span>
+                <span>Dołącz do chatu</span>
+              </button>
+            </div>
+          </div>
         <p class="info-text is-size-7 has-text-warning">*Nie musisz podawać nicku</p>
       </div>
     </div>  
 
-    <form action="" class="form-chat">
-      <div class="columns">
-        <div class="column is-11">
-          <input class="input is-medium" id="message" autocomplete="off" placeholder="Wiadomość" />
-        </div>
-        <div class="column">
-          <button class="button is-success is-medium">
-            <span class="icon is-small">
-              <i class="fas fa-arrow-circle-up"></i>
-            </span>
-            <span>Wyślij</span>
-          </button>
-        </div>
+    <div class="column-settings">
+      <button class="button is-info is-small" title="Tryb nocny" id="btn-night">
+        <span class="icon is-small">
+          <i class="fas fa-moon"></i>
+        </span>
+      </button>
+    </div>
+
+    <!-- <div class="column-settings">
+      <button class="button is-info is-small" title="Ustawienia" id="btn-settings">
+        <span class="icon is-small">
+          <i class="fas fa-cog"></i>
+        </span>
+      </button>
+    </div> -->
+
+    <div class="columns chat-column">
+      <div class="column is-11">
+        <input class="input is-medium" id="message" autocomplete="off" placeholder="Wiadomość" />
       </div>
-    </form>
+      <div class="column">
+        <button class="button is-success is-medium" title="Wyślij wiadomość" id="btn-sent">
+          <span class="icon is-small">
+            <i class="fas fa-arrow-circle-up"></i>
+          </span>
+          <span>Wyślij</span>
+        </button>
+      </div>
+    </div>
 
-    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
-    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
-    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
-    <script>
-      $(function () {
-        var socket = io();
-        let nickName; 
-        $('.form-login').submit(function(){
-          nickName = $('#nickName').val();
-          nickName === '' ? nickName = 'Anonim': nickName;
-          $('.modal').removeClass('is-active');
-          socket.emit('user join', nickName);
-          return false;
-        });
 
-        $('.form-chat').submit(function(){
-          if($('#message').val() === '') {
-            window.alert(`Musisz podać wiadomość!`);
-            return false;
-          }
+  <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+  <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+  <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+  <script>
+    $(function () {
+      var socket = io();
+      let nickName; 
 
-          const messageWithNick = `${nickName}: ${$('#message').val()}`;
-          socket.emit('chat message', messageWithNick);
-          $('#message').val('');
-          return false;
-        });
-        socket.on('chat message', function(msg, type, avatar){
-          switch(type) {
-            case 'join': {
-              $('#messages').append($('<li class="join-text">').html(msg));
-              break;
-            }
-
-            case 'leave': {
-              $('#messages').append($('<li class="leave-text">').html(msg));
-              break;
-            }
-
-            default: {
-              $('#messages').append($('<li>').html(msg));
-              break;
-            }
-          }
-          window.scrollTo(0, document.body.scrollHeight);
-        });
+      $('#message').keypress(function(e){
+        if(e.which == 13){
+            $('#btn-sent').click();
+        }
       });
-    </script>
+
+      $('#nickName').keypress(function(e){
+        if(e.which == 13){
+            $('#btn-login').click();
+        }
+      });
+
+      $('#btn-login').click(function(){
+        nickName = $('#nickName').val();
+        nickName === '' ? nickName = 'Anonim': nickName;
+        $('.modal').removeClass('is-active');
+        socket.emit('user join', nickName);
+        return false;
+      });
+
+      $('#btn-sent').click(function(){
+        if($('#message').val() === '') {
+          window.alert(`Musisz podać wiadomość!`);
+          return false;
+        }
+
+        const messageWithNick = `${nickName}: ${$('#message').val()}`;
+        socket.emit('chat message', messageWithNick);
+        $('#message').val('');
+        return false;
+      });
+
+      $('#btn-night').click(function(){
+        $("body").toggleClass("body-nightmode");
+        $("#message").toggleClass("message-nightmode");
+        $(".chat-column").toggleClass("chat-column-nightmode");
+        $("#messages").toggleClass("messages-nightmode");
+
+        return false;
+      });
+
+
+      socket.on('chat message', function(msg, type, avatar){
+        switch(type) {
+          case 'join': {
+            $('#messages').append($('<li class="join-text">').html(msg));
+            break;
+          }
+
+          case 'leave': {
+            $('#messages').append($('<li class="leave-text">').html(msg));
+            break;
+          }
+
+          default: {
+            $('#messages').append($('<li>').html(msg));
+            break;
+          }
+        }
+        window.scrollTo(0, document.body.scrollHeight);
+      });
+    });
+  </script>
   </body>
 </html>
