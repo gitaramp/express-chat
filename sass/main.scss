@@ -21,16 +21,24 @@ body {
   }
 }
 
-.column-settings {
+.columns-settings {
   display: flex;
   justify-content: flex-end;
-  margin-bottom: -8px;
   z-index: 1;
-  transition: margin-bottom 0.5s;
-}
 
-.column-settings:hover {
-  margin-bottom: 0 !important;
+  .buttons-settings {
+    margin-right: 10px;
+  }
+  
+  #btn-night, #btn-settings {
+    margin-bottom: -8px;
+    transition: margin-bottom .5s;
+  }
+
+  #btn-night:hover, #btn-settings:hover {
+    margin-bottom: 0 !important;
+  }
+
 }
 
 .chat-column {

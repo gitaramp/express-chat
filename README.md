@@ -16,6 +16,8 @@ Todo:
 - [x] Scss file for stylesheet
 - [x] Default user avatar
 - [x] Dark mode
+- [x] Settings tab
+- [x] Possibility to change nickname when user is loged
 - [ ] Emoji
 - [ ] Command for draw gif from giphy.com
 - [ ] Chat rooms
@@ -30,5 +32,4 @@ Todo:
 - [ ] Last time visit
 - [ ] Display name of user who leave the server
 - [ ] User Profile
-- [ ] Settings tab
-- [ ] Possibility to change nickname when user is loged
+- [ ] Use cookies to save user settings

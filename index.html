@@ -33,21 +33,43 @@
       </div>
     </div>  
 
-    <div class="column-settings">
-      <button class="button is-info is-small" title="Tryb nocny" id="btn-night">
+    <div class="modal" id="modal-settings">
+      <div class="modal-background"></div>
+      <div class="modal-content">
+        <p class="is-size-2 has-text-primary">Ustawienia</p>
+        <label class="label has-text-link">Zmień nick</label>
+          <div class='columns column-login'>
+            <div class='column'>
+              <div class="control">
+                <input class="input" id="editNickName" type="text" placeholder="Nick">
+              </div>
+            </div>
+            <div class='column'>
+              <button class="button is-link" id="btn-modal-confirm">
+                <span class="icon is-small">
+                  <i class="fas fa-sign-in-alt"></i>
+                </span>
+                <span>Zatwierdź</span>
+              </button>
+            </div>
+          </div>
+      </div>
+      <button class="modal-close is-large" aria-label="close" id="btn-modal-close"></button>
+    </div>  
+
+    <div class="columns-settings">
+      <button class="buttons-settings button is-dark is-small" title="Tryb nocny" id="btn-night">
         <span class="icon is-small">
-          <i class="fas fa-moon"></i>
+          <svg class="svg-inline--fa fa-moon fa-w-16" aria-hidden="true" data-prefix="fas" data-icon="moon" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M283.211 512c78.962 0 151.079-35.925 198.857-94.792 7.068-8.708-.639-21.43-11.562-19.35-124.203 23.654-238.262-71.576-238.262-196.954 0-72.222 38.662-138.635 101.498-174.394 9.686-5.512 7.25-20.197-3.756-22.23A258.156 258.156 0 0 0 283.211 0c-141.309 0-256 114.511-256 256 0 141.309 114.511 256 256 256z"></path></svg><!-- <i class="fas fa-moon"></i> -->
+        </span>
+      </button>
+                     
+      <button class="buttons-settings button is-info is-small" title="Ustawienia" id="btn-settings">
+        <span class="icon is-small">
+          <svg class="svg-inline--fa fa-cog fa-w-16" aria-hidden="true" data-prefix="fas" data-icon="cog" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M444.788 291.1l42.616 24.599c4.867 2.809 7.126 8.618 5.459 13.985-11.07 35.642-29.97 67.842-54.689 94.586a12.016 12.016 0 0 1-14.832 2.254l-42.584-24.595a191.577 191.577 0 0 1-60.759 35.13v49.182a12.01 12.01 0 0 1-9.377 11.718c-34.956 7.85-72.499 8.256-109.219.007-5.49-1.233-9.403-6.096-9.403-11.723v-49.184a191.555 191.555 0 0 1-60.759-35.13l-42.584 24.595a12.016 12.016 0 0 1-14.832-2.254c-24.718-26.744-43.619-58.944-54.689-94.586-1.667-5.366.592-11.175 5.459-13.985L67.212 291.1a193.48 193.48 0 0 1 0-70.199l-42.616-24.599c-4.867-2.809-7.126-8.618-5.459-13.985 11.07-35.642 29.97-67.842 54.689-94.586a12.016 12.016 0 0 1 14.832-2.254l42.584 24.595a191.577 191.577 0 0 1 60.759-35.13V25.759a12.01 12.01 0 0 1 9.377-11.718c34.956-7.85 72.499-8.256 109.219-.007 5.49 1.233 9.403 6.096 9.403 11.723v49.184a191.555 191.555 0 0 1 60.759 35.13l42.584-24.595a12.016 12.016 0 0 1 14.832 2.254c24.718 26.744 43.619 58.944 54.689 94.586 1.667 5.366-.592 11.175-5.459 13.985L444.788 220.9a193.485 193.485 0 0 1 0 70.2zM336 256c0-44.112-35.888-80-80-80s-80 35.888-80 80 35.888 80 80 80 80-35.888 80-80z"></path></svg><!-- <i class="fas fa-cog"></i> -->
         </span>
       </button>
     </div>
-
-    <!-- <div class="column-settings">
-      <button class="button is-info is-small" title="Ustawienia" id="btn-settings">
-        <span class="icon is-small">
-          <i class="fas fa-cog"></i>
-        </span>
-      </button>
-    </div> -->
 
     <div class="columns chat-column">
       <div class="column is-11">
@@ -84,6 +106,12 @@
         }
       });
 
+      $('#editNickName').keypress(function(e){
+        if(e.which == 13){
+            $('#btn-modal-confirm').click();
+        }
+      });
+
       $('#btn-login').click(function(){
         nickName = $('#nickName').val();
         nickName === '' ? nickName = 'Anonim': nickName;
@@ -98,6 +126,7 @@
           return false;
         }
 
+        nickName === '' ? nickName = 'Anonim': nickName;
         const messageWithNick = `${nickName}: ${$('#message').val()}`;
         socket.emit('chat message', messageWithNick);
         $('#message').val('');
@@ -109,7 +138,24 @@
         $("#message").toggleClass("message-nightmode");
         $(".chat-column").toggleClass("chat-column-nightmode");
         $("#messages").toggleClass("messages-nightmode");
+        return false;
+      });
 
+      $('#btn-settings').click(function(){
+        $("#modal-settings").addClass("is-active");
+        $("#modal-settings").addClass("is-active");
+        $('#editNickName').attr("placeholder", nickName);
+        return false;
+      });
+
+      $('#btn-modal-close').click(function(){
+        $("#modal-settings").removeClass("is-active");
+        return false;
+      });
+
+      $('#btn-modal-confirm').click(function(){
+        nickName = $('#editNickName').val();
+        $("#modal-settings").removeClass("is-active");
         return false;
       });
 
