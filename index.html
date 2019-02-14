@@ -37,21 +37,31 @@
       <div class="modal-background"></div>
       <div class="modal-content">
         <p class="is-size-2 has-text-primary">Ustawienia</p>
-        <label class="label has-text-link">Zmień nick</label>
+        <label for="editNickname" class="label has-text-link">Zmień nick</label>
           <div class='columns column-login'>
             <div class='column'>
               <div class="control">
-                <input class="input" id="editNickName" type="text" placeholder="Nick">
+                <input class="input" id="editNickname" type="text" placeholder="Nick">
               </div>
             </div>
+          </div>
+
+        <label for="editNicknameColor" class="label has-text-link">Zmień kolor nicku</label>
+          <div class='columns column-login'>
             <div class='column'>
-              <button class="button is-link" id="btn-modal-confirm">
-                <span class="icon is-small">
-                  <i class="fas fa-sign-in-alt"></i>
-                </span>
-                <span>Zatwierdź</span>
-              </button>
+              <div class="control">
+                <input type="color" value="#000000" id="editNicknameColor">
+              </div>
             </div>
+          </div>
+
+          <div class='column column-settings-confirm'>
+            <button class="button is-link" id="btn-modal-confirm">
+              <span class="icon is-small">
+                <i class="fas fa-sign-in-alt"></i>
+              </span>
+              <span>Zatwierdź</span>
+            </button>
           </div>
       </div>
       <button class="modal-close is-large" aria-label="close" id="btn-modal-close"></button>
@@ -92,7 +102,8 @@
   <script>
     $(function () {
       var socket = io();
-      let nickName; 
+      let nickName, 
+          nickNameColor; 
 
       $('#message').keypress(function(e){
         if(e.which == 13){
@@ -106,10 +117,14 @@
         }
       });
 
-      $('#editNickName').keypress(function(e){
+      $('#editNickname').keypress(function(e){
         if(e.which == 13){
             $('#btn-modal-confirm').click();
         }
+      });
+
+      $('#editNicknameColor').change(function() {
+        nickNameColor = $('#editNicknameColor').val();
       });
 
       $('#btn-login').click(function(){
@@ -127,8 +142,8 @@
         }
 
         nickName === '' ? nickName = 'Anonim': nickName;
-        const messageWithNick = `${nickName}: ${$('#message').val()}`;
-        socket.emit('chat message', messageWithNick);
+        const messageVal = $('#message').val();
+        socket.emit('chat message', messageVal, nickName, nickNameColor);
         $('#message').val('');
         return false;
       });
@@ -143,8 +158,8 @@
 
       $('#btn-settings').click(function(){
         $("#modal-settings").addClass("is-active");
-        $("#modal-settings").addClass("is-active");
-        $('#editNickName').attr("placeholder", nickName);
+        $('#editNickname').val(nickName);
+        $('#editNicknameColor').attr("value", nickNameColor);
         return false;
       });
 
@@ -154,7 +169,7 @@
       });
 
       $('#btn-modal-confirm').click(function(){
-        nickName = $('#editNickName').val();
+        nickName = $('#editNickname').val();
         $("#modal-settings").removeClass("is-active");
         return false;
       });

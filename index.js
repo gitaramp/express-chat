@@ -30,13 +30,13 @@ app.get('/', function(req, res){
 io.on('connection', function(socket){
   
   socket.on('user join', function(nickName){
-    io.emit('chat message', sendFullMessage(`${nickName} dołączył/a do chatu!`), 'join');
+    io.emit('chat message', sendWelcomeMessage(`${nickName} dołączył/a do chatu!`), 'join');
   });
 
-  socket.on('chat message', function(msg){
+  socket.on('chat message', function(msg, nick, colorNick){
     let avatar = 'default';
-    console.log(sendFullMessage(msg, true));
-    io.emit('chat message', sendFullMessage(msg), avatar);
+    console.log(sendFullMessage(msg, nick, true));
+    io.emit('chat message', sendFullMessage(msg, nick, false, colorNick), avatar);
   });
 
   socket.on('disconnect', function() {
@@ -49,15 +49,27 @@ http.listen(port, function(){
   console.log('listening on *:' + port);
 });
 
-const sendFullMessage = (msg, consoleLog = false, avatar) => {
+const actualDate = () => {
   let hours = new Date().getHours(),
       minutes = new Date().getMinutes(),
       seconds = new Date().getSeconds(),
-      date = `[${hours<10 ? '0' + hours : hours}:${minutes<10 ? '0' + minutes: minutes}:${seconds<10 ? '0' + seconds : seconds}]`,
-      fullMsg;
+      date = `[${hours<10 ? '0' + hours : hours}:${minutes<10 ? '0' + minutes: minutes}:${seconds<10 ? '0' + seconds : seconds}]`;
+  
+  return date;
+}
 
-  consoleLog ? fullMsg = `${date} ${msg}` : fullMsg = `${date}<figure class='image is-24x24'>
-                                            <img src='https://www.larvalabs.com/public/images/cryptopunks/punk8178.png' alt=''></figure>${msg}`;
+const sendWelcomeMessage = (msg) => {
+  let date = actualDate();
+  return `${date} ${msg}`;
+}
+
+const sendFullMessage = (msg, nick, consoleLog, colorNick, avatar) => {
+  let fullMsg, 
+      date = actualDate();  
+
+  consoleLog ? fullMsg = `${date}${nick}: ${msg}` : fullMsg = `${date}<figure class='image is-24x24'>
+                                            <img src='https://www.larvalabs.com/public/images/cryptopunks/punk8178.png' alt=''>
+                                            </figure><span style="color: ${colorNick}">${nick}</span>: ${msg}`;
 
   return fullMsg;
 };

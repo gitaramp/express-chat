@@ -18,6 +18,7 @@ Todo:
 - [x] Dark mode
 - [x] Settings tab
 - [x] Possibility to change nickname when user is loged
+- [x] Color picker for nickname
 - [ ] Emoji
 - [ ] Command for draw gif from giphy.com
 - [ ] Chat rooms
@@ -25,7 +26,6 @@ Todo:
 - [ ] Using '@' symbol to mark someone on chat
 - [ ] Server language options (English/Polish)
 - [ ] Own user avatar from disc or url
-- [ ] Color picker for nickname
 - [ ] Avatar gallery from server
 - [ ] Server logs file
 - [ ] Friends tab
@@ -33,3 +33,4 @@ Todo:
 - [ ] Display name of user who leave the server
 - [ ] User Profile
 - [ ] Use cookies to save user settings
+- [ ] Automatic night mode after 21:00

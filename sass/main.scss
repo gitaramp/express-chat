@@ -21,6 +21,13 @@ body {
   }
 }
 
+#modal-settings {
+    .column-settings-confirm {
+      display: flex;
+      justify-content: flex-end;
+    }
+}
+
 .columns-settings {
   display: flex;
   justify-content: flex-end;
