@@ -3,8 +3,10 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var Cookies = require('cookies');
+var logToFile = require('log-to-file');
 var port = process.env.PORT || 3000;
 let lastVisit;
+let logFileName = 'chatLogs.log';
 
 app.use(express.static('public'));
 
@@ -30,7 +32,8 @@ app.get('/', function(req, res){
 io.on('connection', function(socket){
   
   socket.on('user join', function(nickName){
-    io.emit('chat message', sendWelcomeMessage(`${nickName} dołączył/a do chatu!`), 'join');
+    console.log(sendMessageWithTime(`${nickName} joined to chat`, false, true));
+    io.emit('chat message', sendMessageWithTime(`${nickName} dołączył/a do chatu!`), 'join');
   });
 
   socket.on('chat message', function(msg, nick, colorNick){
@@ -40,13 +43,14 @@ io.on('connection', function(socket){
   });
 
   socket.on('disconnect', function() {
+    console.log(sendMessageWithTime(`someone leaved chat`, false, true));
     io.emit('chat message', sendFullMessage('Ktoś się rozłączył!'), 'leave');
  });
 });
 
 
 http.listen(port, function(){
-  console.log('listening on *:' + port);
+  console.log('Server started! Listening on *:' + port);
 });
 
 const actualDate = () => {
@@ -58,9 +62,12 @@ const actualDate = () => {
   return date;
 }
 
-const sendWelcomeMessage = (msg) => {
-  let date = actualDate();
-  return `${date} ${msg}`;
+const sendMessageWithTime = (msg, space=true, logFile=false) => {
+  let date = actualDate(),
+      fullMsg;
+  space ? fullMsg = `${date} ${msg}` : fullMsg = `${date}${msg}`;
+  if(logFile) logToFile(fullMsg, logFileName);
+  return fullMsg;
 }
 
 const sendFullMessage = (msg, nick, consoleLog, colorNick, avatar) => {
@@ -71,5 +78,6 @@ const sendFullMessage = (msg, nick, consoleLog, colorNick, avatar) => {
                                             <img src='https://www.larvalabs.com/public/images/cryptopunks/punk8178.png' alt=''>
                                             </figure><span style="color: ${colorNick}">${nick}</span>: ${msg}`;
 
+  if(consoleLog) logToFile(fullMsg, logFileName);
   return fullMsg;
 };

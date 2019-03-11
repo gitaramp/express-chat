@@ -19,6 +19,7 @@ Todo:
 - [x] Settings tab
 - [x] Possibility to change nickname when user is loged
 - [x] Color picker for nickname
+- [x] Server logs file
 - [ ] Emoji
 - [ ] Command for draw gif from giphy.com
 - [ ] Chat rooms
@@ -27,7 +28,6 @@ Todo:
 - [ ] Server language options (English/Polish)
 - [ ] Own user avatar from disc or url
 - [ ] Avatar gallery from server
-- [ ] Server logs file
 - [ ] Friends tab
 - [ ] Last time visit
 - [ ] Display name of user who leave the server
