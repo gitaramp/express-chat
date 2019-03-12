@@ -55,6 +55,18 @@
             </div>
           </div>
 
+      <form action="/upload" encType="multipart/form-data" method="post">
+        <label for="editOwnAvatar" class="label has-text-link">Wgraj własny avatar</label>
+          <div class='columns column-login'>
+            <div class='column'>
+              <div class="control">
+                <input type="file" name="ownAvatar" value="" id="editOwnAvatar">
+              </div>
+            </div>
+          </div>
+          <input type="submit" value="Wgraj">
+      </form>
+        
           <div class='column column-settings-confirm'>
             <button class="button is-link" id="btn-modal-confirm">
               <span class="icon is-small">
@@ -102,8 +114,9 @@
   <script>
     $(function () {
       var socket = io();
-      let nickName, 
-          nickNameColor; 
+      let userAvatar = 'default', 
+          nickName, 
+          nickNameColor;
 
       $('#message').keypress(function(e){
         if(e.which == 13){
@@ -143,7 +156,7 @@
 
         nickName === '' ? nickName = 'Anonim': nickName;
         const messageVal = $('#message').val();
-        socket.emit('chat message', messageVal, nickName, nickNameColor);
+        socket.emit('chat message', messageVal, nickName, nickNameColor, userAvatar);
         $('#message').val('');
         return false;
       });
@@ -174,8 +187,15 @@
         return false;
       });
 
+      socket.on('display alert', function(msg){
+        window.alert(msg);
+      })
 
-      socket.on('chat message', function(msg, type, avatar){
+      socket.on('set avatar', function(avatar){
+        userAvatar = avatar;
+      })
+
+      socket.on('chat message', function(msg, type){
         switch(type) {
           case 'join': {
             $('#messages').append($('<li class="join-text">').html(msg));

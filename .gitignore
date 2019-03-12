@@ -1,2 +1,3 @@
 node_modules
 chatLogs.log
+public/users_avatars/*

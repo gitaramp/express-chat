@@ -69,6 +69,12 @@ body {
     li {
       display: flex;
       padding: 5px 10px; 
+ 
+      img.user-avatar {
+        padding: 2px;
+        width: 24px;
+        height: 24px;
+      }
     }
 
     .join-text {

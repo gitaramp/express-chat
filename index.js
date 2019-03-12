@@ -1,12 +1,14 @@
-var express = require('express');
-var app = express();
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
-var Cookies = require('cookies');
-var logToFile = require('log-to-file');
-var port = process.env.PORT || 3000;
+const express = require('express'),
+      app = express(),
+      http = require('http').Server(app),
+      io = require('socket.io')(http),
+      Cookies = require('cookies'),
+      logToFile = require('log-to-file'),
+      fileUpload = require('express-fileupload'),
+      port = process.env.PORT || 3000,
+      logFileName = 'chatLogs.log';
+
 let lastVisit;
-let logFileName = 'chatLogs.log';
 
 app.use(express.static('public'));
 
@@ -28,6 +30,39 @@ app.get('/', function(req, res){
 });
 
 
+app.use(fileUpload({
+  limits : { filesize: 50 * 100 * 100 }
+}));
+
+app.post('/upload', function(req, res) {
+  const file = req.files.ownAvatar;
+  const validImageTypes = ['image/gif', 'image/jpeg', 'image/png'];
+  if (validImageTypes.includes(file.mimetype)) {
+    // req.files.ownAvatar.md5; //cookie with md5 + add file type
+    let type;
+    switch(file.mimetype) {
+      case 'image/gif' : {
+        type = 'gif';
+        break;
+      }
+
+      case 'image/jpeg' : {
+        type = 'jpg';
+        break;
+      }
+
+      case 'image/png' : {
+        type = 'png';
+        break;
+      }
+    }
+    const avatarPath = `users_avatars/${file.md5}.${type}` 
+    file.mv(`public/${avatarPath}`); 
+    io.emit('set avatar', avatarPath); 
+  } else io.emit('display alert', 'Niewłaściwy forma pliku!');
+  res.status(204).send();
+});
+
 
 io.on('connection', function(socket){
   
@@ -36,10 +71,9 @@ io.on('connection', function(socket){
     io.emit('chat message', sendMessageWithTime(`${nickName} dołączył/a do chatu!`), 'join');
   });
 
-  socket.on('chat message', function(msg, nick, colorNick){
-    let avatar = 'default';
+  socket.on('chat message', function(msg, nick, colorNick, avatar){
     console.log(sendFullMessage(msg, nick, true));
-    io.emit('chat message', sendFullMessage(msg, nick, false, colorNick), avatar);
+    io.emit('chat message', sendFullMessage(msg, nick, false, colorNick, avatar));
   });
 
   socket.on('disconnect', function() {
@@ -47,7 +81,6 @@ io.on('connection', function(socket){
     io.emit('chat message', sendFullMessage('Ktoś się rozłączył!'), 'leave');
  });
 });
-
 
 http.listen(port, function(){
   console.log('Server started! Listening on *:' + port);
@@ -72,11 +105,15 @@ const sendMessageWithTime = (msg, space=true, logFile=false) => {
 
 const sendFullMessage = (msg, nick, consoleLog, colorNick, avatar) => {
   let fullMsg, 
-      date = actualDate();  
+      date = actualDate(),
+      userAvatar;
+      
+  avatar === 'default' ? userAvatar = 'img/default.png' : 
+    userAvatar = avatar;
 
   consoleLog ? fullMsg = `${date}${nick}: ${msg}` : fullMsg = `${date}<figure class='image is-24x24'>
-                                            <img src='https://www.larvalabs.com/public/images/cryptopunks/punk8178.png' alt=''>
-                                            </figure><span style="color: ${colorNick}">${nick}</span>: ${msg}`;
+      <img class='user-avatar' src='${userAvatar}' alt=''>
+      </figure><span style="color: ${colorNick}">${nick}</span>: ${msg}`;
 
   if(consoleLog) logToFile(fullMsg, logFileName);
   return fullMsg;
