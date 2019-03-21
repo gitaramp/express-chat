@@ -1,3 +1,5 @@
+//https://www.npmjs.com/package/image-downloader --> image from url
+
 const express = require('express'),
       app = express(),
       http = require('http').Server(app),
@@ -31,6 +33,11 @@ io.on('connection', function(socket){
     io.emit('load avatar', Session.avatar);
   if (Session.nickColor)
     io.emit('load nickColor', Session.nickColor);
+
+  const date = new Date();
+  const hour = date.getHours();
+  if(hour > 21 && hour < 5) 
+    io.emit('set nightMode');
 
   socket.on('user join', function(nickName){
     Session.nickName = nickName;
@@ -78,7 +85,6 @@ app.post('/upload', function(req, res) {
   const file = req.files.ownAvatar;
   const validImageTypes = ['image/gif', 'image/jpeg', 'image/png'];
   if (validImageTypes.includes(file.mimetype)) {
-    // req.files.ownAvatar.md5; //cookie with md5 + add file type
     let type;
     switch(file.mimetype) {
       case 'image/gif' : {

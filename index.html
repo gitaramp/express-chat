@@ -205,6 +205,13 @@
         window.alert(msg);
       })
 
+      socket.on('set nightMode', function(){
+        $("body").addClass("body-nightmode");
+        $("#message").addClass("message-nightmode");
+        $(".chat-column").addClass("chat-column-nightmode");
+        $("#messages").addClass("messages-nightmode");
+      })
+
       socket.on('set avatar', function(avatar){
         userAvatar = avatar;
         socket.emit('change avatar', avatar);

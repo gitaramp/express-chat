@@ -22,6 +22,7 @@ Todo:
 - [x] Server logs file
 - [x] Own temporary user avatar from disc
 - [x] Session for save user settings
+- [x] NightMode (21:00 - 05:00)
 - [ ] Emoji
 - [ ] Command for draw gif from giphy.com
 - [ ] Chat rooms
@@ -34,4 +35,3 @@ Todo:
 - [ ] Display name of user who leave the server
 - [ ] User Profile
 - [ ] Minify js files and optimisation image files
-- [ ] Automatic night mode after 21:00
