@@ -21,19 +21,17 @@ Todo:
 - [x] Color picker for nickname
 - [x] Server logs file
 - [x] Own temporary user avatar from disc
+- [x] Session for save user settings
 - [ ] Emoji
 - [ ] Command for draw gif from giphy.com
 - [ ] Chat rooms
 - [ ] Private messages
 - [ ] Using '@' symbol to mark someone on chat
 - [ ] Server language options (English/Polish)
-- [ ] Own temporary user avatar from url
-- [ ] Own user avatar with save in cookies
+- [ ] Own user avatar from url
 - [ ] Avatar gallery from server
 - [ ] Friends tab
-- [ ] Last time visit
 - [ ] Display name of user who leave the server
 - [ ] User Profile
 - [ ] Minify js files and optimisation image files
-- [ ] Use cookies to save user settings
 - [ ] Automatic night mode after 21:00

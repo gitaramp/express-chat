@@ -138,6 +138,7 @@
 
       $('#editNicknameColor').change(function() {
         nickNameColor = $('#editNicknameColor').val();
+        socket.emit('change nickColor', nickNameColor);
       });
 
       $('#btn-login').click(function(){
@@ -182,10 +183,23 @@
       });
 
       $('#btn-modal-confirm').click(function(){
+        socket.emit('change nickName', nickName);
         nickName = $('#editNickname').val();
         $("#modal-settings").removeClass("is-active");
         return false;
       });
+
+      socket.on('load nickName', function(savedNick){
+        $('#nickName').attr("value", savedNick);
+      })
+
+      socket.on('load avatar', function(avatar){
+        userAvatar = avatar;
+      })
+
+      socket.on('load nickColor', function(color){
+        nickNameColor = color;
+      })
 
       socket.on('display alert', function(msg){
         window.alert(msg);
@@ -193,6 +207,7 @@
 
       socket.on('set avatar', function(avatar){
         userAvatar = avatar;
+        socket.emit('change avatar', avatar);
       })
 
       socket.on('chat message', function(msg, type){

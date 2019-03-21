@@ -2,37 +2,77 @@ const express = require('express'),
       app = express(),
       http = require('http').Server(app),
       io = require('socket.io')(http),
-      Cookies = require('cookies'),
       logToFile = require('log-to-file'),
       fileUpload = require('express-fileupload'),
       port = process.env.PORT || 3000,
-      logFileName = 'chatLogs.log';
+      logFileName = 'chatLogs.log',
+      sharedsession = require("express-socket.io-session");
 
-let lastVisit;
-
-app.use(express.static('public'));
-
-app.get('/', function(req, res){
-  res.sendFile(__dirname + '/index.html');
-  
-  var keys = ['keyboard cat'];
-  var cookies = new Cookies(req, res, { keys: keys })
-  lastVisit = cookies.get('LastVisit', { signed: true })
-  cookies.set('LastVisit', new Date().toISOString(), { signed: true })
- 
-  // if (!lastVisit) {
-  //   res.setHeader('Content-Type', 'text/plain')
-  //   res.end('Welcome, first time visitor!')
-  // } else {
-  //   res.setHeader('Content-Type', 'text/plain')
-  //   res.end('Welcome back! Nothing much changed since your last visit at ' + lastVisit + '.')
-  // }
+const session = require("express-session")({
+  secret: "my-secret",
+  resave: true,
+  saveUninitialized: true
 });
 
-
+app.use(express.static('public'));
+app.use(session);
 app.use(fileUpload({
   limits : { filesize: 50 * 100 * 100 }
 }));
+io.use(sharedsession(session, {
+  autoSave:true
+}));
+
+io.on('connection', function(socket){
+  const Session = socket.handshake.session;
+  if (Session.nickName)
+    io.emit('load nickName', Session.nickName);
+  if (Session.avatar)
+    io.emit('load avatar', Session.avatar);
+  if (Session.nickColor)
+    io.emit('load nickColor', Session.nickColor);
+
+  socket.on('user join', function(nickName){
+    Session.nickName = nickName;
+    Session.save();
+   
+    console.log(sendMessageWithTime(`${nickName} joined to chat`, false, true));
+    io.emit('chat message', sendMessageWithTime(`${nickName} dołączył/a do chatu!`), 'join');
+  });
+
+  socket.on('chat message', function(msg, nick, colorNick, avatar){
+    console.log(sendFullMessage(msg, nick, true));
+    io.emit('chat message', sendFullMessage(msg, nick, false, colorNick, avatar));
+  });
+
+  socket.on('change nickName', function(nickName){
+    Session.nickName = nickName;
+    Session.save();
+  });
+
+  socket.on('change avatar', function(path){
+    Session.avatar = path;
+    Session.save();
+  });
+
+  socket.on('change nickColor', function(color){
+    Session.nickColor = color;
+    Session.save();
+  });
+
+  socket.on('disconnect', function() {
+    console.log(sendMessageWithTime(`Someone leaved chat`, false, true));
+    io.emit('chat message', sendFullMessage('Ktoś się rozłączył!'), 'leave');
+ });
+});
+
+http.listen(port, function(){
+  console.log('Server started! Listening on *:' + port);
+});
+
+app.get('/', function(req, res){
+  res.sendFile(__dirname + '/index.html');
+});
 
 app.post('/upload', function(req, res) {
   const file = req.files.ownAvatar;
@@ -59,31 +99,8 @@ app.post('/upload', function(req, res) {
     const avatarPath = `users_avatars/${file.md5}.${type}` 
     file.mv(`public/${avatarPath}`); 
     io.emit('set avatar', avatarPath); 
-  } else io.emit('display alert', 'Niewłaściwy forma pliku!');
+  } else io.emit('display alert', 'Niewłaściwy format pliku!');
   res.status(204).send();
-});
-
-
-io.on('connection', function(socket){
-  
-  socket.on('user join', function(nickName){
-    console.log(sendMessageWithTime(`${nickName} joined to chat`, false, true));
-    io.emit('chat message', sendMessageWithTime(`${nickName} dołączył/a do chatu!`), 'join');
-  });
-
-  socket.on('chat message', function(msg, nick, colorNick, avatar){
-    console.log(sendFullMessage(msg, nick, true));
-    io.emit('chat message', sendFullMessage(msg, nick, false, colorNick, avatar));
-  });
-
-  socket.on('disconnect', function() {
-    console.log(sendMessageWithTime(`someone leaved chat`, false, true));
-    io.emit('chat message', sendFullMessage('Ktoś się rozłączył!'), 'leave');
- });
-});
-
-http.listen(port, function(){
-  console.log('Server started! Listening on *:' + port);
 });
 
 const actualDate = () => {
